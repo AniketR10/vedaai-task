@@ -72,11 +72,12 @@ router.post("/", upload.single("file"), async (req: Request, res: Response) => {
     await assignment.save();
 
     // add to queue
-    await generationQueue.add(
+    const job = await generationQueue.add(
       "generate",
       { assignmentId: assignment._id.toString() },
       { jobId: `gen-${assignment._id}` }
     );
+    console.log(`[API] Job queued: ${job.id} for assignment ${assignment._id}`);
 
     res.status(201).json({
       id: assignment._id,
@@ -111,6 +112,20 @@ router.get("/", async (_req: Request, res: Response) => {
       .sort({ createdAt: -1 })
       .limit(50);
     res.json(assignments);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || "Internal server error" });
+  }
+});
+
+// delete assignment
+router.delete("/:id", async (req: Request, res: Response) => {
+  try {
+    const assignment = await Assignment.findByIdAndDelete(req.params.id);
+    if (!assignment) {
+      res.status(404).json({ error: "Assignment not found" });
+      return;
+    }
+    res.json({ message: "Assignment deleted" });
   } catch (err: any) {
     res.status(500).json({ error: err.message || "Internal server error" });
   }

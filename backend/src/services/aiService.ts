@@ -2,7 +2,7 @@ import Groq from "groq-sdk";
 import { env } from "../config/env";
 import { AssignmentInput, GeneratedPaper, Section } from "../types";
 
-const groq = new Groq({ apiKey: env.GROQ_API_KEY });
+const groq = new Groq({ apiKey: env.GROQ_API_KEY, timeout: 60000 });
 
 function buildPrompt(input: AssignmentInput): string {
   const questionTypeDescriptions = input.questionTypes
@@ -78,7 +78,7 @@ export async function generateQuestionPaper(
       },
       { role: "user", content: prompt },
     ],
-    model: "moonshotai/kimi-k2-instruct-0905",
+    model: "openai/gpt-oss-120b",
     response_format: { type: "json_object" },
   });
 

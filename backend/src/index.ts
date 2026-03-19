@@ -5,6 +5,7 @@ import { env } from "./config/env";
 import { connectDB } from "./config/db";
 import { initWebSocket } from "./services/websocket";
 import assignmentRoutes from "./routes/assignment";
+import "./workers/generationWorker"; // start worker in same process
 
 const app = express();
 const server = http.createServer(app);

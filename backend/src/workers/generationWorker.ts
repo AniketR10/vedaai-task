@@ -1,18 +1,26 @@
 import { Worker, Job } from "bullmq";
-import { redis } from "../config/redis";
-import { cacheRedis } from "../config/redis";
+import IORedis from "ioredis";
+import { cacheRedis, redisPub } from "../config/redis";
 import { connectDB } from "../config/db";
 import { Assignment } from "../models/Assignment";
 import { generateQuestionPaper } from "../services/aiService";
-import { notifyClient } from "../services/websocket";
-import { AssignmentInput } from "../types";
+import { AssignmentInput, WSMessage } from "../types";
 import { env } from "../config/env";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+const workerConnection = new IORedis(env.REDIS_URL, {
+  maxRetriesPerRequest: null,
+}) as any;
+
+function publish(message: WSMessage) {
+  redisPub.publish("ws:notifications", JSON.stringify(message));
+}
+
 async function processGeneration(job: Job) {
   const { assignmentId } = job.data;
+  console.log(`[Worker] Processing job ${job.id} for assignment ${assignmentId}`);
 
   await connectDB();
 
@@ -25,7 +33,7 @@ async function processGeneration(job: Job) {
   assignment.status = "processing";
   await assignment.save();
 
-  notifyClient({
+  publish({
     type: "job_status",
     assignmentId,
     data: { status: "processing", message: "Generating questions..." },
@@ -41,7 +49,7 @@ async function processGeneration(job: Job) {
     assignment.status = "completed";
     await assignment.save();
 
-    notifyClient({
+    publish({
       type: "job_complete",
       assignmentId,
       data: { status: "completed", paper },
@@ -49,10 +57,10 @@ async function processGeneration(job: Job) {
     return;
   }
 
-  notifyClient({
+  publish({
     type: "job_progress",
     assignmentId,
-    data: { status: "processing", progress: 30, message: "Calling ai model..." },
+    data: { status: "processing", progress: 30, message: "Calling AI model..." },
   });
 
   const input: AssignmentInput = {
@@ -71,9 +79,11 @@ async function processGeneration(job: Job) {
     fileContent: assignment.fileContent,
   };
 
+  console.log(`[Worker] Calling Groq API for assignment ${assignmentId}...`);
   const paper = await generateQuestionPaper(input);
+  console.log(`[Worker] Groq API responded for assignment ${assignmentId}`);
 
-  notifyClient({
+  publish({
     type: "job_progress",
     assignmentId,
     data: { status: "processing", progress: 80, message: "Saving results..." },
@@ -86,7 +96,7 @@ async function processGeneration(job: Job) {
   assignment.status = "completed";
   await assignment.save();
 
-  notifyClient({
+  publish({
     type: "job_complete",
     assignmentId,
     data: { status: "completed", paper },
@@ -94,7 +104,7 @@ async function processGeneration(job: Job) {
 }
 
 const worker = new Worker("question-generation", processGeneration, {
-  connection: redis,
+  connection: workerConnection,
   concurrency: 3,
 });
 
@@ -109,7 +119,7 @@ worker.on("failed", async (job, err) => {
         status: "failed",
         error: err.message,
       });
-      notifyClient({
+      publish({
         type: "job_error",
         assignmentId,
         data: { status: "failed", error: err.message },
