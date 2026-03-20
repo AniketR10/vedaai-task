@@ -23,7 +23,7 @@ export default function Sidebar() {
 
       <div className="px-1 mb-8">
         <Link 
-          href="/assignment/create"
+          href="/"
           className="w-full bg-[#27292D] border-2 border-[#E95C3F] hover:bg-black text-white rounded-full py-3.5 px-4 items-center justify-center gap-2 text-[15px] font-semibold transition-all shadow-sm block text-center"
         >
           <svg className="inline-block" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
