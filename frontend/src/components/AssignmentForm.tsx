@@ -33,8 +33,33 @@ export default function AssignmentForm() {
   function validate(): boolean {
     const newErrors: Record<string, string> = {};
 
-    if (!form.title?.trim() && !form.subject?.trim()) {
+    if (!form.dueDate) {
+      newErrors.dueDate = "Due date is required";
+    }
 
+    if (!form.file && (!form.additionalInstructions || !form.additionalInstructions.trim())) {
+      newErrors.source = "Source material required";
+    }
+
+    if (form.questionTypes.length === 0) {
+      newErrors.questionTypes = "At least one question type is required";
+    }
+
+    form.questionTypes.forEach((qt, i) => {
+      if (qt.count < 1) newErrors[`qt_count_${i}`] = "Count must be at least 1";
+      if (qt.marks < 1) newErrors[`qt_marks_${i}`] = "Marks must be at least 1";
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      if (newErrors.source) {
+        toast.error("Please upload a file or provide instructions.");
+      } else if (newErrors.dueDate) {
+        toast.error("Please select a Due Date.");
+      } else if (newErrors.questionTypes) {
+        toast.error("Please add at least one question type.");
+      } else {
+        toast.error("Please ensure all question counts and marks are at least 1.");
+      }
     }
 
     setErrors(newErrors);

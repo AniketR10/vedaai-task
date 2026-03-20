@@ -323,7 +323,7 @@ export default function AssignmentsPage() {
         {assignments.length > 0 && (
           <div className="fixed bottom-0 right-0 left-0 md:left-70 h-32 bg-linear-to-t from-[#E6E8EB] via-[#E6E8EB]/90 to-transparent pointer-events-none flex items-end justify-center pb-8 z-30">
             <Link
-              href="/assignment/create"
+              href="/"
               className="pointer-events-auto flex items-center gap-2 bg-[#1A1C1E] hover:bg-black text-white px-7 py-3.5 rounded-full font-medium text-[15px] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

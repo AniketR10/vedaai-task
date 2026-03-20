@@ -98,7 +98,7 @@ export default function Sidebar() {
         </div>
 
         <Link 
-          href="/library" 
+          href="/" 
           className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-colors ${
             pathname?.startsWith("/library") ? "bg-[#F4F4F5] text-gray-900 font-bold" : "text-gray-400 hover:text-gray-700 hover:bg-gray-50"
           }`}
@@ -126,7 +126,7 @@ export default function Sidebar() {
         </Link>
 
         <Link 
-          href="/profile" 
+          href="/assignments/" 
           className="bg-[#F4F4F5] rounded-[22px] p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-200/50 transition-colors"
         >
           <div className="w-10.5 h-10.5 rounded-full bg-[#FFE3D6] shrink-0 overflow-hidden border border-white">
