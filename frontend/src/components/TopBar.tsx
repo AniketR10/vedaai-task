@@ -50,10 +50,15 @@ export default function TopBar() {
           <div className="w-9 h-9 rounded-full bg-gradient-to- from-blue-400 to-indigo-500 flex items-center justify-center text-white text-sm font-semibold">
             JD
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2 cursor-pointer">
+            <img 
+              src="https://i.pravatar.cc/150?img=11" 
+              alt="John Doe" 
+              className="w-8 h-8 rounded-full object-cover border border-gray-200" 
+            />
             <span className="text-sm font-medium text-gray-700">John Doe</span>
             <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5-7.5-7.5-7.5" />
             </svg>
           </div>
         </div>

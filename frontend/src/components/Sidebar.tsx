@@ -7,14 +7,14 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-70 h-[calc(100vh-32px)] my-4 ml-4 bg-white rounded-4xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex flex-col p-5 relative z-40 shrink-0">
+    <aside className="hidden md:flex w-70 h-[calc(100vh-32px)] my-4 ml-4 bg-white rounded-4xl shadow-[0_4px_20px_rgb(0,0,0,0.03)] flex-col p-5 relative z-40 shrink-0">
       
       <div className="flex items-center gap-3 px-3 pt-2 mb-8">
         <img 
           decoding="auto" 
           src="https://framerusercontent.com/images/3Cq5t9KRqg77eLpJOhnQR0KZ558.png?width=160&height=160" 
           alt="VedaAI Logo"
-          className="w-8 h-8 object-contain shrink-0"
+          className="w-8 h-8 object-contain shrink-4"
         />
         <span className="text-[22px] font-extrabold tracking-tight text-gray-900">
           VedaAI
@@ -23,7 +23,7 @@ export default function Sidebar() {
 
       <div className="px-1 mb-8">
         <Link 
-          href="/"
+          href="/assignment/create"
           className="w-full bg-[#27292D] border-2 border-[#E95C3F] hover:bg-black text-white rounded-full py-3.5 px-4 items-center justify-center gap-2 text-[15px] font-semibold transition-all shadow-sm block text-center"
         >
           <svg className="inline-block" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -50,9 +50,8 @@ export default function Sidebar() {
           Home
         </Link>
 
-        <Link 
-          href="/groups" 
-          className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-colors ${
+        <div 
+          className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-colors cursor-default ${
             pathname?.startsWith("/groups") ? "bg-[#F4F4F5] text-gray-900 font-bold" : "text-gray-400 hover:text-gray-700 hover:bg-gray-50"
           }`}
         >
@@ -63,7 +62,7 @@ export default function Sidebar() {
             <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
           </svg>
           My Groups
-        </Link>
+        </div>
 
         <Link 
           href="/assignments" 
@@ -86,9 +85,8 @@ export default function Sidebar() {
           </span>
         </Link>
 
-        <Link 
-          href="/toolkit" 
-          className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-colors ${
+        <div 
+          className={`flex items-center gap-3 px-4 py-3.5 rounded-2xl text-[15px] font-medium transition-colors cursor-default ${
             pathname?.startsWith("/toolkit") ? "bg-[#F4F4F5] text-gray-900 font-bold" : "text-gray-400 hover:text-gray-700 hover:bg-gray-50"
           }`}
         >
@@ -97,7 +95,7 @@ export default function Sidebar() {
             <line x1="12" y1="18" x2="12.01" y2="18"></line>
           </svg>
           AI Teacher's Toolkit
-        </Link>
+        </div>
 
         <Link 
           href="/library" 
@@ -127,12 +125,16 @@ export default function Sidebar() {
           Settings
         </Link>
 
-        <div className="bg-[#F4F4F5] rounded-[22px] p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-200/50 transition-colors">
-          <div className="w-10.5 h-10.5 rounded-full bg-[#FFE3D6] flex items-center justify-center shrink-0 overflow-hidden border border-white">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="8" r="4" fill="#D97757"/>
-              <path d="M6 21V19C6 16.7909 7.79086 15 10 15H14C16.2091 15 18 16.7909 18 19V21" fill="#D97757"/>
-            </svg>
+        <Link 
+          href="/profile" 
+          className="bg-[#F4F4F5] rounded-[22px] p-3 flex items-center gap-3 cursor-pointer hover:bg-gray-200/50 transition-colors"
+        >
+          <div className="w-10.5 h-10.5 rounded-full bg-[#FFE3D6] shrink-0 overflow-hidden border border-white">
+            <img 
+              src="https://i.pravatar.cc/150?img=11" 
+              alt="Delhi Public School Logo"
+              className="w-full h-full object-cover"
+            />
           </div>
           
           <div className="flex flex-col overflow-hidden">
@@ -143,7 +145,7 @@ export default function Sidebar() {
               Bokaro Steel City
             </span>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );

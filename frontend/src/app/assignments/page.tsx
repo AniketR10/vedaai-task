@@ -116,24 +116,77 @@ export default function AssignmentsPage() {
 
   return (
     <DashboardLayout>
-<div className="min-h-[calc(100vh-64px)] bg-linear-to-r from-[#c0c3cb] via-[#E6E8EB] to-[#E6E8EB] from-0% via-5% to-5% relative pb-32">        {loading ? (
-          <div className="flex items-center justify-center h-full pt-32">
+      <div className="min-h-[calc(100vh-64px)] bg-linear-to-r flex flex-col from-[#c0c3cb] via-[#E6E8EB] to-[#E6E8EB] from-0% via-5% to-5% relative pb-32">
+        {loading ? (
+          <div className="flex items-center justify-center h-full pt-32 flex-1">
             <svg className="w-8 h-8 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
           </div>
         ) : assignments.length === 0 ? (
-          <div className="flex flex-col items-center justify-center pt-32 px-4">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">No assignments yet</h2>
-            <p className="text-sm text-gray-500 text-center max-w-md mb-8 leading-relaxed">
-              Create your first assignment to start collecting and grading student
-              submissions.
-            </p>
-          </div>
-        ) : (
+          
+          /* ========== UPDATED EMPTY STATE ========== */
+          <div className="flex flex-col items-center justify-center flex-1 px-4 mt-8">
+            
+            {/* Custom Empty State Illustration */}
+            <div className="relative w-70 h-60 flex items-center justify-center mb-6">
+              
+              {/* Background Decor */}
+              <svg className="absolute top-12 left-6 w-10.5 h-10.5 text-[#1F2A37]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M 10 70 C 10 40, 50 30, 40 60 C 35 75, 15 70, 25 50 C 35 30, 70 30, 80 10" />
+              </svg>
+              
+              <svg className="absolute bottom-12 left-12 w-5 h-5 text-[#60A5FA]" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2z" />
+              </svg>
+              
+              <div className="absolute bottom-20 right-10 w-1.75 h-1.75 rounded-full bg-[#5282CA]" />
 
-          <div className="px-8 py-8">
+              <div className="absolute top-8 right-14 w-13 h-6.5 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center px-2.5 gap-2 z-10">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#B29EF8]" />
+                <div className="h-2 w-5 bg-gray-200 rounded-full" />
+              </div>
+
+              {/* Main Document */}
+              <div className="relative w-32 h-44 bg-white rounded-[20px] shadow-[0_8px_30px_rgb(0,0,0,0.05)] border border-gray-100 p-5 flex flex-col gap-3.5 z-0">
+                <div className="w-10 h-2.5 bg-[#17202A] rounded-full" />
+                <div className="w-full h-2.5 bg-[#E2E8F0] rounded-full" />
+                <div className="w-4/5 h-2.5 bg-[#E2E8F0] rounded-full" />
+                <div className="w-full h-2.5 bg-[#E2E8F0] rounded-full" />
+                <div className="w-3/5 h-2.5 bg-[#E2E8F0] rounded-full" />
+              </div>
+
+              <div className="absolute right-12 bottom-6 z-20">
+                <div className="relative w-25 h-25 rounded-full border-8 border-[#E8E6F3] bg-white/70 backdrop-blur-sm flex items-center justify-center shadow-sm">
+                  <svg className="w-12 h-12 text-[#FE4B4B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <div className="absolute -bottom-8.5 -right-5.5 w-6.5 h-16 bg-[#E8E6F3] rounded-full -rotate-40 origin-top-left" />
+                </div>
+              </div>
+            </div>
+
+            <h2 className="text-[17px] font-bold text-gray-900 mb-2">No assignments yet</h2>
+            <p className="text-[13px] text-[#71717A] font-medium text-center max-w-105 mb-8 leading-[1.6]">
+              Create your first assignment to start collecting and grading student
+              submissions. You can set up rubrics, define marking criteria, and let AI
+              assist with grading.
+            </p>
+
+            <Link
+              href="/"
+              className="bg-[#18181B] text-white px-7 py-3 rounded-full font-bold text-[13.5px] flex items-center gap-2 hover:bg-black transition-all shadow-md hover:-translate-y-0.5"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Create Your First Assignment
+            </Link>
+          </div>          
+        ) : (
+          
+          <div className="px-8 py-8 flex-1">
             <div className="mb-8">
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-2.5 h-2.5 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.5)]"></div>
@@ -267,18 +320,20 @@ export default function AssignmentsPage() {
           </div>
         )}
 
-        <div className="fixed bottom-0 right-0 left-0 md:left-70 h-32 bg-linear-to-t from-[#E6E8EB] via-[#E6E8EB]/90 to-transparent pointer-events-none flex items-end justify-center pb-8 z-30">
-          <Link
-            href="/"
-            className="pointer-events-auto flex items-center gap-2 bg-[#1A1C1E] hover:bg-black text-white px-7 py-3.5 rounded-full font-medium text-[15px] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-            Create Assignment
-          </Link>
-        </div>
+        {assignments.length > 0 && (
+          <div className="fixed bottom-0 right-0 left-0 md:left-70 h-32 bg-linear-to-t from-[#E6E8EB] via-[#E6E8EB]/90 to-transparent pointer-events-none flex items-end justify-center pb-8 z-30">
+            <Link
+              href="/assignment/create"
+              className="pointer-events-auto flex items-center gap-2 bg-[#1A1C1E] hover:bg-black text-white px-7 py-3.5 rounded-full font-medium text-[15px] shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Create Assignment
+            </Link>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
