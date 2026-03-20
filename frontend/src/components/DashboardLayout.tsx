@@ -13,8 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       
       <Sidebar />
 
-      <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        
+<div className="flex-1 flex flex-col h-full overflow-hidden relative bg-linear-to-r from-[#ccced3] via-[#E6E8EB] to-[#E6E8EB] via-15%">        
         <div className="hidden md:block">
           <TopBar />
         </div>
