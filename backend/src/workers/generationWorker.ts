@@ -94,6 +94,10 @@ async function processGeneration(job: Job) {
 
   assignment.generatedPaper = paper;
   assignment.status = "completed";
+  // update assignment with ai-inferred title/subject/grade
+  if (paper.title) assignment.title = paper.title;
+  if (paper.subject) assignment.subject = paper.subject;
+  if (paper.grade) assignment.grade = paper.grade;
   await assignment.save();
 
   publish({

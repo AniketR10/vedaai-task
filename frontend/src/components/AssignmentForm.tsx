@@ -157,19 +157,11 @@ export default function AssignmentForm() {
             <label className="block text-[14.5px] font-bold text-gray-800 mb-2">Due Date</label>
             <div className="relative">
               <input
-                type="text"
-                onFocus={(e) => (e.target.type = "date")}
-                onBlur={(e) => {
-                  if (!e.target.value) e.target.type = "text";
-                }}
+                type="date"
                 value={form.dueDate}
                 onChange={(e) => setFormField("dueDate", e.target.value)}
-                placeholder="Choose a chapter"
-                className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] font-medium text-gray-700 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all bg-white"
+                className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] font-medium text-gray-700 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all bg-white cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
-              <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-900 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
             </div>
           </div>
 

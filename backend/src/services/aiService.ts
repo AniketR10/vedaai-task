@@ -14,25 +14,24 @@ function buildPrompt(input: AssignmentInput): string {
 
   return `You are an expert exam paper creator. Generate a structured question paper based on the following specifications.
 
-SUBJECT: ${input.subject}
-GRADE/CLASS: ${input.grade}
-TITLE: ${input.title}
 TOTAL MARKS: ${input.totalMarks}
 DIFFICULTY LEVEL: ${input.difficulty}
 
 QUESTION BREAKDOWN:
 ${questionTypeDescriptions}
 
-${input.additionalInstructions ? `ADDITIONAL INSTRUCTIONS: ${input.additionalInstructions}` : ""}
-${input.fileContent ? `REFERENCE CONTENT:\n${input.fileContent.substring(0, 3000)}` : ""}
+${input.additionalInstructions ? `ADDITIONAL INSTRUCTIONS FROM TEACHER: ${input.additionalInstructions}` : ""}
+${input.fileContent ? `REFERENCE CONTENT (extracted from uploaded PDF/file):\n${input.fileContent.substring(0, 3000)}` : ""}
+
+CRITICAL: You MUST infer the subject, class/grade, and an appropriate title from the reference content and/or additional instructions provided above. If no subject or grade can be determined, make a reasonable guess based on the content's complexity and topic.
 
 IMPORTANT: You MUST respond with ONLY valid JSON, no markdown, no code blocks, no extra text.
 
 The JSON must follow this exact structure:
 {
-  "title": "${input.title}",
-  "subject": "${input.subject}",
-  "grade": "${input.grade}",
+  "title": "inferred title based on the content, e.g. Chapter 5 - Laws of Motion Test",
+  "subject": "inferred subject, e.g. Physics",
+  "grade": "inferred class/grade, e.g. Class 11",
   "totalMarks": ${input.totalMarks},
   "duration": "appropriate duration like 2 Hours",
   "sections": [
@@ -61,7 +60,8 @@ RULES:
 5. Difficulty should be "${input.difficulty}" overall, but vary individual questions
 6. Questions should be academically rigorous and grade-appropriate
 7. Total marks of all questions must equal ${input.totalMarks}
-8. Return ONLY the JSON object, nothing else`;
+8. The title, subject, and grade MUST be inferred from the provided content — do NOT use generic placeholders
+9. Return ONLY the JSON object, nothing else`;
 }
 
 export async function generateQuestionPaper(
@@ -110,9 +110,9 @@ export async function generateQuestionPaper(
 
   parsed.generatedAt = new Date().toISOString();
   parsed.totalMarks = input.totalMarks;
-  parsed.subject = input.subject;
-  parsed.grade = input.grade;
-  parsed.title = input.title;
+  if (input.subject && input.subject !== "General") parsed.subject = input.subject;
+  if (input.grade && input.grade !== "10") parsed.grade = input.grade;
+  if (input.title && input.title !== "Untitled Assignment") parsed.title = input.title;
 
   return parsed;
 }
