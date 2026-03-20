@@ -82,16 +82,13 @@ export default function QuestionPaper({
   return (
     <div className="w-full pb-20">
       
-      {/* COMMON POPPED-OUT BACKGROUND WRAPPER */}
       <div className="bg-white shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-4xl p-2 md:p-3 border border-gray-100">
         
-        {/* Dark Chat Bubble */}
         <div className="bg-[#2A2A2A] rounded-3xl p-6 text-white relative">
           <p className="text-[14px] md:text-[15px] font-medium leading-relaxed mb-5 md:mb-6 pr-4">
             Certainly, Lakshya! Here are customized Question Paper for your CBSE Grade {paper.grade} {paper.subject} classes on the NCERT chapters:
           </p>
           
-          {/* Responsive Download Button */}
           <button
             onClick={handleDownloadPDF}
             className="inline-flex items-center justify-center gap-2 bg-[#424242] md:bg-white text-white md:text-black w-10.5 h-10.5 md:w-auto md:h-auto md:px-5 md:py-2.5 rounded-full text-[13px] font-bold hover:opacity-80 md:hover:bg-gray-100 transition-colors"
@@ -100,30 +97,25 @@ export default function QuestionPaper({
             <svg className="w-[4.5 h-4.5 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            {/* Text hidden on mobile, visible on md screens and up */}
             <span className="hidden md:inline">Download as PDF</span>
           </button>
         </div>
 
-        {/* Traditional Question Paper Document */}
         <div
           ref={paperRef}
           className="bg-white rounded-3xl p-6 md:p-14 text-gray-900 font-sans mt-1 md:mt-2"
         >
-          {/* Paper Header */}
           <div className="text-center mb-8">
             <h1 className="text-xl md:text-2xl font-bold mb-1">Delhi Public School, Sector-4, Bokaro</h1>
             <p className="text-md md:text-lg font-medium mb-1">Subject: {paper.subject}</p>
             <p className="text-md md:text-lg font-medium">Class: {paper.grade}</p>
           </div>
 
-          {/* Paper Meta Grid */}
           <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center text-[13px] md:text-[14px] font-bold mb-6 gap-2">
             <span>Time Allowed: {paper.duration || "45 minutes"}</span>
             <span>Maximum Marks: {paper.totalMarks}</span>
           </div>
 
-          {/* Global Instructions */}
           <p className="text-[13px] md:text-[14px] font-bold mb-6">
             All questions are compulsory unless stated otherwise.
           </p>
@@ -135,13 +127,10 @@ export default function QuestionPaper({
             <p>Class: {paper.grade} Section: ________</p>
           </div>
 
-          {/* Sections */}
           {paper.sections.map((section, sIdx) => (
             <div key={sIdx} className="mb-10">
-              {/* Section Header */}
               <h2 className="text-center text-lg font-bold mb-4">{section.title}</h2>
               
-              {/* Optional Section Specific Instructions */}
               {section.instruction && (
                 <div className="mb-5">
                   <p className="font-bold text-[13px] md:text-[14px] mb-0.5">{section.title === "Section A" ? "Short Answer Questions" : ""}</p>
@@ -149,7 +138,6 @@ export default function QuestionPaper({
                 </div>
               )}
 
-              {/* Questions List */}
               <div className="space-y-4">
                 {section.questions.map((q) => (
                   <div key={q.questionNumber} className="flex gap-2 text-[13px] md:text-[14px] leading-relaxed">
@@ -159,7 +147,6 @@ export default function QuestionPaper({
                       <span>{q.text} </span>
                       <span>[{q.marks} {q.marks === 1 ? "Mark" : "Marks"}]</span>
 
-                      {/* MCQ Options (if any) formatted continuously */}
                       {q.options && q.options.length > 0 && (
                         <div className="mt-1.5 ml-2 grid grid-cols-1 sm:grid-cols-2 gap-1 text-[13px]">
                           {q.options.map((opt, oIdx) => (
@@ -176,25 +163,7 @@ export default function QuestionPaper({
             </div>
           ))}
 
-          {/* End of Paper Mark */}
           <p className="font-bold text-[13px] md:text-[14px] mb-8 mt-4">End of Question Paper</p>
-
-          {/* Answer Key (Optional continuous section) */}
-          <div className="mt-12 pt-8 border-t border-dashed border-gray-300">
-            <h3 className="text-[14px] md:text-[15px] font-bold mb-5">Answer Key:</h3>
-            <div className="space-y-4">
-              {paper.sections.map((section) =>
-                section.questions.map((q) => (
-                  <div key={`ans-${q.questionNumber}`} className="flex gap-2 text-[12px] md:text-[13px] leading-relaxed text-gray-800">
-                    <span className="w-4 shrink-0 text-right">{q.questionNumber}.</span>
-                    <div className="flex-1">
-                      <p>{(q as any).answer || "Answer explanation goes here based on the generated paper content."}</p>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
 
         </div>
       </div>

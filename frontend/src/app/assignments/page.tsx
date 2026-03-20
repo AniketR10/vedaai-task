@@ -18,6 +18,8 @@ export default function AssignmentsPage() {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const assignmentsRef = useRef<Assignment[]>([]);
+  assignmentsRef.current = assignments;
 
   useEffect(() => {
     getAssignments()
@@ -37,24 +39,15 @@ export default function AssignmentsPage() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // ws for real-time status updates
   useEffect(() => {
-    const activeIds = assignments
-      .filter((a) => a.status === "pending" || a.status === "processing")
-      .map((a) => a._id);
-
-    if (activeIds.length === 0) {
-      if (wsRef.current) {
-        wsRef.current.close();
-        wsRef.current = null;
-      }
-      return;
-    }
-
-    const ws = new WebSocket(`${WS_URL}?assignmentId=${activeIds[0]}`);
+    const ws = new WebSocket(WS_URL);
     wsRef.current = ws;
 
     ws.onopen = () => {
+      // subscribe to all active assignments
+      const activeIds = assignmentsRef.current
+        .filter((a) => a.status === "pending" || a.status === "processing")
+        .map((a) => a._id);
       activeIds.forEach((id) => {
         ws.send(JSON.stringify({ type: "subscribe", assignmentId: id }));
       });
@@ -68,7 +61,7 @@ export default function AssignmentsPage() {
 
         if (msg.type === "job_complete") {
           setAssignments((prev) =>
-            prev.map((a) => (a._id === id ? { ...a, status: "completed" } : a))
+            prev.map((a) => (a._id === id ? { ...a, status: "completed", title: msg.data?.paper?.title || a.title, subject: msg.data?.paper?.subject || a.subject, grade: msg.data?.paper?.grade || a.grade } : a))
           );
         } else if (msg.type === "job_error") {
           setAssignments((prev) =>
@@ -86,6 +79,18 @@ export default function AssignmentsPage() {
       ws.close();
       wsRef.current = null;
     };
+  }, []);
+
+  useEffect(() => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+
+    const activeIds = assignments
+      .filter((a) => a.status === "pending" || a.status === "processing")
+      .map((a) => a._id);
+    activeIds.forEach((id) => {
+      ws.send(JSON.stringify({ type: "subscribe", assignmentId: id }));
+    });
   }, [assignments]);
 
   async function handleDelete(id: string) {
@@ -126,13 +131,10 @@ export default function AssignmentsPage() {
           </div>
         ) : assignments.length === 0 ? (
           
-          /* ========== UPDATED EMPTY STATE ========== */
           <div className="flex flex-col items-center justify-center flex-1 px-4 mt-8">
             
-            {/* Custom Empty State Illustration */}
             <div className="relative w-70 h-60 flex items-center justify-center mb-6">
               
-              {/* Background Decor */}
               <svg className="absolute top-12 left-6 w-10.5 h-10.5 text-[#1F2A37]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M 10 70 C 10 40, 50 30, 40 60 C 35 75, 15 70, 25 50 C 35 30, 70 30, 80 10" />
               </svg>
@@ -148,7 +150,6 @@ export default function AssignmentsPage() {
                 <div className="h-2 w-5 bg-gray-200 rounded-full" />
               </div>
 
-              {/* Main Document */}
               <div className="relative w-32 h-44 bg-white rounded-[20px] shadow-[0_8px_30px_rgb(0,0,0,0.05)] border border-gray-100 p-5 flex flex-col gap-3.5 z-0">
                 <div className="w-10 h-2.5 bg-[#17202A] rounded-full" />
                 <div className="w-full h-2.5 bg-[#E2E8F0] rounded-full" />
