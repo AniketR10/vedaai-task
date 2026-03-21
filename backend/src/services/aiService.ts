@@ -12,31 +12,37 @@ function buildPrompt(input: AssignmentInput): string {
     )
     .join("\n");
 
-  return `You are an expert exam paper creator. Generate a structured question paper based on the following specifications.
+  const totalQuestions = input.questionTypes.reduce((sum, qt) => sum + qt.count, 0);
+  const expectedMarks = input.questionTypes.reduce((sum, qt) => sum + qt.count * qt.marks, 0);
+
+  return `You are an expert exam paper creator. Generate a structured question paper with EXACT specifications below. Do NOT deviate from the counts or marks.
 
 TOTAL MARKS: ${input.totalMarks}
 DIFFICULTY LEVEL: ${input.difficulty}
+TOTAL QUESTIONS: exactly ${totalQuestions}
 
-QUESTION BREAKDOWN:
+EXACT QUESTION BREAKDOWN (you MUST follow this precisely):
 ${questionTypeDescriptions}
+
+Expected marks sum from questions: ${expectedMarks}. Total paper marks: ${input.totalMarks}.
 
 ${input.additionalInstructions ? `ADDITIONAL INSTRUCTIONS FROM TEACHER: ${input.additionalInstructions}` : ""}
 ${input.fileContent ? `REFERENCE CONTENT (extracted from uploaded PDF/file):\n${input.fileContent.substring(0, 3000)}` : ""}
 
-CRITICAL: You MUST infer the subject, class/grade, and an appropriate title from the reference content and/or additional instructions provided above. If no subject or grade can be determined, make a reasonable guess based on the content's complexity and topic.
+CRITICAL: Infer the subject, class/grade, and title from the reference content and/or additional instructions. If unclear, make a reasonable guess based on the content's complexity and topic.
 
-IMPORTANT: You MUST respond with ONLY valid JSON, no markdown, no code blocks, no extra text.
+Respond with ONLY valid JSON, no markdown, no code blocks.
 
-The JSON must follow this exact structure:
+JSON structure:
 {
-  "title": "inferred title based on the content, e.g. Chapter 5 - Laws of Motion Test",
+  "title": "inferred title, e.g. Chapter 5 - Laws of Motion Test",
   "subject": "inferred subject, e.g. Physics",
   "grade": "inferred class/grade, e.g. Class 11",
   "totalMarks": ${input.totalMarks},
   "duration": "appropriate duration like 2 Hours",
   "sections": [
     {
-      "title": "Section A",
+      "title": "Section A - Multiple Choice Questions",
       "instruction": "Attempt all questions",
       "questions": [
         {
@@ -52,16 +58,17 @@ The JSON must follow this exact structure:
   ]
 }
 
-RULES:
-1. Group questions into logical sections (Section A, B, C, etc.)
-2. Each question MUST have: questionNumber, text, type, difficulty (easy/medium/hard), marks
-3. MCQ questions MUST have an "options" array with 4 options prefixed with A), B), C), D)
-4. true_false questions should have options: ["A) True", "B) False"]
-5. Difficulty should be "${input.difficulty}" overall, but vary individual questions
-6. Questions should be academically rigorous and grade-appropriate
-7. Total marks of all questions must equal ${input.totalMarks}
-8. The title, subject, and grade MUST be inferred from the provided content — do NOT use generic placeholders
-9. Return ONLY the JSON object, nothing else`;
+STRICT RULES:
+1. You MUST generate EXACTLY ${totalQuestions} questions total — no more, no less
+2. For each question type, generate EXACTLY the count specified above
+3. Each question's marks MUST match what is specified above for its type
+4. Group questions by type into sections (e.g. Section A for MCQs, Section B for short answer, etc.)
+5. Each question MUST have: questionNumber, text, type, difficulty (easy/medium/hard), marks
+6. MCQ questions MUST have "options": ["A) ...", "B) ...", "C) ...", "D) ..."]
+7. true_false questions MUST have "options": ["A) True", "B) False"]
+8. Overall difficulty: "${input.difficulty}", but vary individual questions within that range
+9. Questions must be academically rigorous and grade-appropriate
+10. Return ONLY the JSON object`;
 }
 
 export async function generateQuestionPaper(
