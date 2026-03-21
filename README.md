@@ -99,6 +99,15 @@ CLIENT_URL=http://localhost:3000
 - **PDF export** -> download the formatted question paper as PDF
 - **Responsive dashboard** -> sidebar layout with search, filters, and assignment cards
 
+## Deployment
+
+| Service | Platform |
+|---------|----------|
+| Frontend | Vercel |
+| Backend + Worker | Render |
+| Database | MongoDB Atlas |
+| Cache/Queue | Upstash Redis |
+
 ## Key Design Decisions
 
 1. **AI infers metadata** -> instead of requiring teachers to manually enter subject/grade/title, the AI extracts this from the uploaded PDF or instructions

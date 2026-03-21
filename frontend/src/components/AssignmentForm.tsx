@@ -159,6 +159,7 @@ export default function AssignmentForm() {
               <input
                 type="date"
                 value={form.dueDate}
+                min={new Date().toISOString().split("T")[0]}
                 onChange={(e) => setFormField("dueDate", e.target.value)}
                 className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-[14px] font-medium text-gray-700 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all bg-white cursor-pointer [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               />
