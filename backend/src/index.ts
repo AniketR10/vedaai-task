@@ -12,7 +12,18 @@ const server = http.createServer(app);
 
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // allow requests with no origin 
+      if (!origin) return callback(null, true);
+      if (
+        origin === env.CLIENT_URL ||
+        origin.endsWith(".vercel.app") ||
+        origin === "http://localhost:3000"
+      ) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
