@@ -10,8 +10,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const useTLS = env.REDIS_URL.startsWith("rediss://");
 const workerConnection = new IORedis(env.REDIS_URL, {
   maxRetriesPerRequest: null,
+  ...(useTLS ? { tls: {} } : {}),
 }) as any;
 
 function publish(message: WSMessage) {
