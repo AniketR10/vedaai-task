@@ -47,23 +47,29 @@ Frontend  ──▶  Express API  ──▶  MongoDB
 
 ### Install & Run
 
+This is an **npm workspaces monorepo** — install everything from the root.
+
 ```bash
 # 1. Clone
 git clone <repo-url> && cd vedaai-task
 
-# 2. Start Mongodb & Redis
+# 2. Start MongoDB & Redis
 docker compose up -d
 
-# 3. Backend setup
-cd backend
-cp .env   # then add your GROQ_API_KEY
+# 3. Install all dependencies (from root)
 npm install
-npm run dev             # starts api server + worker
 
-# 4. Frontend (new terminal)
-cd frontend
-npm install
-npm run dev             # starts Next.js
+# 4. Configure environment
+cp backend/.env.example backend/.env   # then add your GROQ_API_KEY
+
+# 5. Run both frontend & backend
+npm run dev
+```
+
+Or run them separately:
+```bash
+npm run dev:backend     # Express API + worker
+npm run dev:frontend    # Next.js
 ```
 
 ### Environment Variables (`backend/.env`)
