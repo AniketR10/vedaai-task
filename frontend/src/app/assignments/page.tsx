@@ -14,6 +14,7 @@ export default function AssignmentsPage() {
   const router = useRouter();
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [slowLoad, setSlowLoad] = useState(false);
   const [search, setSearch] = useState("");
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -22,10 +23,14 @@ export default function AssignmentsPage() {
   assignmentsRef.current = assignments;
 
   useEffect(() => {
+    const timer = setTimeout(() => setSlowLoad(true), 3000);
     getAssignments()
       .then(setAssignments)
       .catch(() => {})
-      .finally(() => setLoading(false));
+      .finally(() => {
+        clearTimeout(timer);
+        setLoading(false);
+      });
   }, []);
 
   // close menu on outside click
@@ -123,11 +128,16 @@ export default function AssignmentsPage() {
     <DashboardLayout>
       <div className="min-h-[calc(100vh-64px)] bg-linear-to-r flex flex-col from-[#c0c3cb] via-[#E6E8EB] to-[#E6E8EB] from-0% via-5% to-5% relative pb-32">
         {loading ? (
-          <div className="flex items-center justify-center h-full pt-32 flex-1">
+          <div className="flex flex-col items-center justify-center h-full pt-32 flex-1 gap-4">
             <svg className="w-8 h-8 animate-spin text-gray-400" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
+            {slowLoad && (
+              <p className="text-[13px] text-gray-400 font-medium text-center animate-pulse">
+                Server is hosted on render free-tier, for the first time this may be slow...
+              </p>
+            )}
           </div>
         ) : assignments.length === 0 ? (
           
