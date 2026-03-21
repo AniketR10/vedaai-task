@@ -125,7 +125,7 @@ export default function AssignmentForm() {
         </div>
 
         {/* Main Card */}
-        <div className="bg-white rounded-4xl p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+        <div className="bg-white rounded-4xl p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
           <h2 className="text-[18px] font-bold text-gray-900 mb-1">Assignment Details</h2>
           <p className="text-[14px] text-gray-400 font-medium mb-8">Basic information about your assignment</p>
 
@@ -166,92 +166,94 @@ export default function AssignmentForm() {
             </div>
           </div>
 
-          <div>
-            <div className="grid grid-cols-[1fr_auto_120px_120px] gap-4 mb-3 items-center text-gray-600 text-[13.5px] font-bold px-1">
-              <div>Question Type</div>
-              <div className="w-4"></div>
-              <div className="text-center">No. of Questions</div>
-              <div className="text-center">Marks</div>
-            </div>
-
-            <div className="space-y-3.5">
-              {form.questionTypes.map((qt, index) => (
-                <div key={index} className="grid grid-cols-[1fr_auto_120px_120px] gap-4 items-center">
-                  
-                  <div className="relative border border-gray-200 rounded-xl bg-white overflow-hidden">
-                    <select
-                      value={qt.type}
-                      onChange={(e) => updateQuestionType(index, "type", e.target.value)}
-                      className="w-full appearance-none bg-transparent py-3.5 pl-4 pr-10 text-[14px] font-bold text-gray-700 outline-none cursor-pointer"
-                    >
-                      {Object.entries(QUESTION_TYPE_LABELS).map(([val, label]) => (
-                        <option key={val} value={val}>{label}</option>
-                      ))}
-                    </select>
-                    <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-
-                  <button 
-                    type="button" 
-                    onClick={() => removeQuestionType(index)}
-                    className="text-gray-400 hover:text-gray-900 transition-colors p-1"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-
-                  <div className="flex items-center justify-between border border-gray-100 rounded-full px-1.5 py-1.5 bg-[#F9FAFB]">
-                    <button 
-                      type="button"
-                      onClick={() => updateQuestionType(index, "count", Math.max(1, qt.count - 1))}
-                      className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
-                    >-</button>
-                    <span className="font-extrabold text-[14px] text-gray-900 w-8 text-center">{qt.count}</span>
-                    <button 
-                      type="button"
-                      onClick={() => updateQuestionType(index, "count", qt.count + 1)}
-                      className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
-                    >+</button>
-                  </div>
-
-                  <div className="flex items-center justify-between border border-gray-100 rounded-full px-1.5 py-1.5 bg-[#F9FAFB]">
-                    <button 
-                      type="button"
-                      onClick={() => updateQuestionType(index, "marks", Math.max(1, qt.marks - 1))}
-                      className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
-                    >-</button>
-                    <span className="font-extrabold text-[14px] text-gray-900 w-8 text-center">{qt.marks}</span>
-                    <button 
-                      type="button"
-                      onClick={() => updateQuestionType(index, "marks", qt.marks + 1)}
-                      className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
-                    >+</button>
-                  </div>
-
-                </div>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={addQuestionType}
-              className="flex items-center gap-2.5 mt-6 text-[14px] font-extrabold text-gray-900 hover:opacity-70 transition-opacity"
-            >
-              <div className="w-6 h-6 bg-gray-900 text-white flex items-center justify-center rounded-full shadow-sm">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
+          <div className="w-full overflow-x-auto pb-2 custom-scrollbar">
+            <div className="min-w-125">
+              <div className="grid grid-cols-[1fr_auto_120px_120px] gap-4 mb-3 items-center text-gray-600 text-[13.5px] font-bold px-1">
+                <div>Question Type</div>
+                <div className="w-4"></div>
+                <div className="text-center">No. of Questions</div>
+                <div className="text-center">Marks</div>
               </div>
-              Add Question Type
-            </button>
-            
-            <div className="text-right mt-8 text-[13.5px] text-gray-500 font-medium tracking-tight space-y-0.5">
-              <p>Total Questions : <span className="text-gray-900 font-extrabold ml-1">{totalQuestions}</span></p>
-              <p>Total Marks : <span className="text-gray-900 font-extrabold ml-1">{calculatedMarks}</span></p>
+
+              <div className="space-y-3.5">
+                {form.questionTypes.map((qt, index) => (
+                  <div key={index} className="grid grid-cols-[1fr_auto_120px_120px] gap-4 items-center">
+                    
+                    <div className="relative border border-gray-200 rounded-xl bg-white overflow-hidden">
+                      <select
+                        value={qt.type}
+                        onChange={(e) => updateQuestionType(index, "type", e.target.value)}
+                        className="w-full appearance-none bg-transparent py-3.5 pl-4 pr-10 text-[14px] font-bold text-gray-700 outline-none cursor-pointer"
+                      >
+                        {Object.entries(QUESTION_TYPE_LABELS).map(([val, label]) => (
+                          <option key={val} value={val}>{label}</option>
+                        ))}
+                      </select>
+                      <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+
+                    <button 
+                      type="button" 
+                      onClick={() => removeQuestionType(index)}
+                      className="text-gray-400 hover:text-gray-900 transition-colors p-1"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+
+                    <div className="flex items-center justify-between border border-gray-100 rounded-full px-1.5 py-1.5 bg-[#F9FAFB]">
+                      <button 
+                        type="button"
+                        onClick={() => updateQuestionType(index, "count", Math.max(1, qt.count - 1))}
+                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
+                      >-</button>
+                      <span className="font-extrabold text-[14px] text-gray-900 w-8 text-center">{qt.count}</span>
+                      <button 
+                        type="button"
+                        onClick={() => updateQuestionType(index, "count", qt.count + 1)}
+                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
+                      >+</button>
+                    </div>
+
+                    <div className="flex items-center justify-between border border-gray-100 rounded-full px-1.5 py-1.5 bg-[#F9FAFB]">
+                      <button 
+                        type="button"
+                        onClick={() => updateQuestionType(index, "marks", Math.max(1, qt.marks - 1))}
+                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
+                      >-</button>
+                      <span className="font-extrabold text-[14px] text-gray-900 w-8 text-center">{qt.marks}</span>
+                      <button 
+                        type="button"
+                        onClick={() => updateQuestionType(index, "marks", qt.marks + 1)}
+                        className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-900 text-lg font-medium transition-colors"
+                      >+</button>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={addQuestionType}
+            className="flex items-center gap-2.5 mt-6 text-[14px] font-extrabold text-gray-900 hover:opacity-70 transition-opacity"
+          >
+            <div className="w-6 h-6 bg-gray-900 text-white flex items-center justify-center rounded-full shadow-sm">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </div>
+            Add Question Type
+          </button>
+          
+          <div className="text-right mt-8 text-[13.5px] text-gray-500 font-medium tracking-tight space-y-0.5">
+            <p>Total Questions : <span className="text-gray-900 font-extrabold ml-1">{totalQuestions}</span></p>
+            <p>Total Marks : <span className="text-gray-900 font-extrabold ml-1">{calculatedMarks}</span></p>
           </div>
 
           <div className="mt-8">
